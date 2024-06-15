@@ -1,1 +1,36 @@
-<button (click)="getUsersData()">Click</button>
+<div class="diet-container">
+  <table class="table table-hover table-hover table-bordered table-sm f-table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Date</th>
+        <th scope="col">Day</th>
+        <th scope="col">TK</th>
+        <th scope="col">TP</th>
+        <th scope="col">BW</th>
+        <th scope="col">Meal-1</th>
+        <th scope="col">Meal-2</th>
+        <th scope="col">Meal-3</th>
+        <th scope="col">Meal-4</th>
+        <th scope="col">Meal-5</th>
+        <th scope="col">Other-Int</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tableData; let i = index">
+        <td scope="row">{{ i }}</td>
+        <td>{{ item.date }}</td>
+        <td>{{ item.day }}</td>
+        <td>{{ item.tKal }}</td>
+        <td>{{ item.tP }}</td>
+        <td>{{ item.bodyWeight }}</td>
+        <td>{{ item.meal1 }}</td>
+        <td>{{ item.meal2 }}</td>
+        <td>{{ item.meal3 }}</td>
+        <td>{{ item.meal4 }}</td>
+        <td>{{ item.meal5 }}</td>
+        <td>{{ item.others }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
