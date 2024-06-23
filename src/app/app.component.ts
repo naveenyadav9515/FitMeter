@@ -11,19 +11,166 @@ export class AppComponent {
   public foodList: any;
   public tableData: any;
 
+  // input section
+  public mealMode: Number = 1;
+  public mealObj: any = {
+    date: new Intl.DateTimeFormat('en-US', {
+      day: '2-digit',
+      month: 'short',
+    }).format(new Date()),
+    bodyWeight: '61',
+    meal1: [
+      {
+        type: 'roti',
+        quantity: 100,
+      },
+      {
+        type: 'curry',
+        quantity: 100,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+    ],
+    meal2: [
+      {
+        type: 'rice',
+        quantity: 200,
+      },
+      {
+        type: 'curry',
+        quantity: 100,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+    ],
+    meal3: [
+      {
+        type: 'egg',
+        quantity: 2,
+      },
+      {
+        type: 'banana',
+        quantity: 0,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+    ],
+    meal4: [
+      {
+        type: 'banana',
+        quantity: 2,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+    ],
+    meal5: [
+      {
+        type: 'milk',
+        quantity: 100,
+      },
+      {
+        type: 'muesli',
+        quantity: 50,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+    ],
+    others: [
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+      {
+        type: 'egg',
+        quantity: 0,
+      },
+    ],
+  };
+  public backUpData = JSON.parse(JSON.stringify(this.mealObj));
+  public editMode = false;
+
   constructor(public api: ApiService) {}
 
   ngOnInit() {
     this.getData();
   }
 
+  public save() {
+    this.api.getUsers().subscribe((data) => {
+      this.data = data;
+      this.mealObj.id = (
+        Number(this.data.intake[this.data.intake.length - 1].id) + 1
+      ).toString();
+      this.data.intake.push(this.mealObj);
+      this.api.addMealData(data).subscribe(() => {
+        this.getData();
+        this.mealObj = JSON.parse(JSON.stringify(this.backUpData));
+      });
+    });
+  }
+  public updateData() {
+    this.api.getUsers().subscribe((data) => {
+      this.data = data;
+      this.data.intake.splice(
+        this.data.intake.findIndex((item: any) => item.id === this.mealObj.id),
+        1
+      );
+      this.data.intake.push(this.mealObj);
+      this.data.intake.sort(
+        (a: { id: number }, b: { id: number }) => a.id - b.id
+      );
+      this.api.addMealData(data).subscribe(() => {
+        this.getData();
+        this.mealObj = JSON.parse(JSON.stringify(this.backUpData));
+        this.editMode = false;
+      });
+    });
+  }
+  public deleteMeal(mealId: any) {
+    this.api.getUsers().subscribe((data) => {
+      this.data = data;
+      this.data.intake.splice(
+        this.data.intake.findIndex((item: any) => item.id === mealId),
+        1
+      );
+
+      this.api.addMealData(data).subscribe(() => {
+        this.getData();
+      });
+    });
+  }
+  public editMeal(mealId: any) {
+    this.api.getUsers().subscribe((data) => {
+      this.data = data;
+      this.editMode = true;
+      this.mealObj = this.data.intake.find((item: any) => item.id === mealId);
+    });
+  }
+
   public prepareContent() {
-    this.foodList = this.data[0].foodList;
-    let intakeList = this.data[0].intake;
-    this.tableData = this.data[0].intake;
+    this.foodList = this.data.foodList;
+    let intakeList = this.data.intake;
+    this.tableData = this.data.intake;
     for (let i = 0; i < this.tableData.length; i++) {
       this.tableData[i].data = intakeList[i].date;
-      this.tableData[i].day = intakeList[i].day;
       this.tableData[i].tKal = this.prepareTKal(intakeList[i]);
       this.tableData[i].tP = Math.floor(this.prepareTP(intakeList[i]));
       this.tableData[i].bodyWeight = intakeList[i].bodyWeight;
@@ -79,8 +226,6 @@ export class AppComponent {
             totalkal = totalkal + multiplier * foodType.protien;
           }
         }
-
-        console.log(totalkal);
       });
     });
     return totalkal;
@@ -98,8 +243,6 @@ export class AppComponent {
             totalkal = totalkal + multiplier * foodType.kcal;
           }
         }
-
-        console.log(totalkal);
       });
     });
     return totalkal;

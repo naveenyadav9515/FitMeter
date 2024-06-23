@@ -1,10 +1,174 @@
 <div class="diet-container">
+  <div class="row m-2">
+    <div class="col-2">
+      <label for="inputPassword">Date</label>
+      <input
+        class="form-control"
+        type="text"
+        aria-label="default input example"
+        [(ngModel)]="mealObj.date"
+      />
+    </div>
+    <div class="col-2">
+      <label for="inputPassword">Date</label>
+      <input
+        class="form-control"
+        type="text"
+        aria-label="default input example"
+        [(ngModel)]="mealObj.bodyWeight"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-primary">Meal-1</button>
+      <br />
+      <div class="row" *ngFor="let meal of mealObj.meal1">
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default
+        input example"
+          [(ngModel)]="meal.type"
+        />
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default input example"
+          [(ngModel)]="meal.quantity"
+        />
+      </div>
+    </div>
+    <div class="col">
+      <button type="button" class="btn btn-primary">Meal-2</button>
+      <br />
+      <div class="row" *ngFor="let meal of mealObj.meal2">
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default
+        input example"
+          [(ngModel)]="meal.type"
+        />
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default input example"
+          [(ngModel)]="meal.quantity"
+        />
+      </div>
+    </div>
+
+    <div class="col">
+      <button type="button" class="btn btn-primary">Meal-3</button>
+      <br />
+      <div class="row" *ngFor="let meal of mealObj.meal3">
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default
+        input example"
+          [(ngModel)]="meal.type"
+        />
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default input example"
+          [(ngModel)]="meal.quantity"
+        />
+      </div>
+    </div>
+
+    <div class="col">
+      <button type="button" class="btn btn-primary">Meal-4</button>
+      <br />
+      <div class="row" *ngFor="let meal of mealObj.meal4">
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default
+        input example"
+          [(ngModel)]="meal.type"
+        />
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default input example"
+          [(ngModel)]="meal.quantity"
+        />
+      </div>
+    </div>
+
+    <div class="col">
+      <button type="button" class="btn btn-primary">Meal-5</button>
+      <br />
+      <div class="row" *ngFor="let meal of mealObj.meal5">
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default
+        input example"
+          [(ngModel)]="meal.type"
+        />
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default input example"
+          [(ngModel)]="meal.quantity"
+        />
+      </div>
+    </div>
+
+    <div class="col">
+      <button type="button" class="btn btn-primary">Others</button>
+      <br />
+      <div class="row" *ngFor="let meal of mealObj.others">
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default
+        input example"
+          [(ngModel)]="meal.type"
+        />
+        <input
+          class="form-control col m-2"
+          type="text"
+          aria-label="default input example"
+          [(ngModel)]="meal.quantity"
+        />
+      </div>
+    </div>
+  </div>
+
+  <button
+    *ngIf="!editMode"
+    type="button"
+    class="btn btn-primary m-2"
+    (click)="save()"
+  >
+    Save Data
+  </button>
+  <button
+    *ngIf="editMode"
+    type="button"
+    class="btn btn-primary m-2"
+    (click)="updateData()"
+  >
+    Update Data
+  </button>
+
   <table class="table table-hover table-hover table-bordered table-sm f-table">
     <thead>
       <tr>
+        <th scope="col">
+          <span class="material-icons"> delete_forever </span>
+        </th>
+        <th scope="col">
+          <span class="material-icons"> edit </span>
+        </th>
         <th scope="col">#</th>
         <th scope="col">Date</th>
-        <th scope="col">Day</th>
         <th scope="col">TK</th>
         <th scope="col">TP</th>
         <th scope="col">BW</th>
@@ -17,10 +181,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of tableData; let i = index">
-        <td scope="row">{{ i }}</td>
+      <tr *ngFor="let item of tableData?.reverse()">
+        <td scope="row" style="cursor: pointer" (click)="deleteMeal(item.id)">
+          <span class="material-icons"> delete_forever </span>
+        </td>
+        <td scope="row" style="cursor: pointer" (click)="editMeal(item.id)">
+          <span class="material-icons"> edit </span>
+        </td>
+        <td scope="row">{{ item.id }}</td>
         <td>{{ item.date }}</td>
-        <td>{{ item.day }}</td>
         <td>{{ item.tKal }}</td>
         <td>{{ item.tP }}</td>
         <td>{{ item.bodyWeight }}</td>

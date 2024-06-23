@@ -7,7 +7,10 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
   constructor(private http: HttpClient) {}
-  public getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`http://localhost:3000/data`);
+  public getUsers(): Observable<any> {
+    return this.http.get(`http://localhost:3000/data`);
+  }
+  public addMealData(intakeObj: any): Observable<any> {
+    return this.http.put(`http://localhost:3000/data`, intakeObj);
   }
 }
